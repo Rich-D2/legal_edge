@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ai-legal-ui
+    runtime: python
+    buildCommand: |
+      cd frontend
+      npm install
+      npm run build
+      cd ..
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        value: Us8vGARh31iSm7UJ409mwl9rMfoZGrBP

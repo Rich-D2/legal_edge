@@ -1,21 +1,21 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from "./App";
 import { AuthProvider } from "react-oidc-context";
 
 const cognitoAuthConfig = {
-  authority: "https://legal-edge.auth.us-east-1.amazoncognito.com", // <-- Hosted UI domain
+  authority: "https://legal-edge.auth.us-east-1.amazoncognito.com",
   client_id: "13gsp3c44n3vt9gtds1q38ggtv",
   redirect_uri: "https://legal-edge.onrender.com",
   response_type: "code",
   scope: "email openid phone",
 };
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
   <React.StrictMode>
-    <AuthProvider {...oidcConfig}>
+    <AuthProvider {...cognitoAuthConfig}>
       <App />
     </AuthProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

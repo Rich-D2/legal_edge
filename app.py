@@ -15,7 +15,7 @@ CORS(app)
 users = []
 
 # Secret key for JWT
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret")
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "Us8vGARh31iSm7UJ409mwl9rMfoZGrBP")
 
 # JWT decorator
 def token_required(f):

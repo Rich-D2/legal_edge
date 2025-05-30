@@ -1,3 +1,4 @@
+// src/components/Dashboard.js
 import React, { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import axios from "axios";
@@ -35,7 +36,9 @@ function Dashboard() {
     <div style={{ padding: "2rem" }}>
       <h1>Dashboard</h1>
       <p>{message}</p>
-      {error && <pre style={{ color: "red" }}>{JSON.stringify(error, null, 2)}</pre>}
+      {error && (
+        <pre style={{ color: "red" }}>{JSON.stringify(error, null, 2)}</pre>
+      )}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// src/components/Dashboard.js
 import React, { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import axios from "axios";
@@ -16,7 +15,7 @@ function Dashboard() {
       }
 
       try {
-        const res = await axios.get("https://legal-edge.onrender.com/api/dashboard", {
+        const res = await axios.get("/api/dashboard", {
           headers: {
             Authorization: `Bearer ${auth.user.access_token}`,
           },

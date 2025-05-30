@@ -7,7 +7,7 @@ function App() {
   const auth = useAuth();
 
   const signOutRedirect = () => {
-    const clientId = "13gsp3c44n3vt9gtds1q38ggtv"; // Replace with your actual client ID
+    const clientId = "7ut3257t62pf9rjg1lpusugvi3"; // Replace with your actual client ID
     const logoutUri = "https://legal-edge.onrender.com"; // Redirect URI
     const cognitoDomain = "https://legal-edge.auth.us-east-1.amazoncognito.com"; // Replace this with your domain
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;

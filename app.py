@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 import uuid
 import jwt
-import Dashboard from "./src/components/Dashboard";
+import Dashboard from "./components/Dashboard";
 from datetime import datetime, timedelta
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -16,7 +16,7 @@ CORS(app)
 users = []
 
 # Secret key for JWT
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "Us8vGARh31iSm7UJ409mwl9rMfoZGrBP")
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "7ut3257t62pf9rjg1lpusugvi3")
 
 # JWT decorator
 def token_required(f):

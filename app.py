@@ -3,7 +3,6 @@ from flask_cors import CORS
 import os
 import uuid
 import jwt
-import Dashboard from "./components/Dashboard";
 from datetime import datetime, timedelta
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -78,6 +77,12 @@ def login():
     except Exception as e:
         print(e)
         return jsonify({"error": "Login error"}), 500
+
+# Protected dashboard route
+@app.route("/api/dashboard", methods=["GET"])
+@token_required
+def dashboard():
+    return jsonify({"message": "Welcome to your dashboard!"})
 
 # Protected test routes
 @app.route("/api/customer", methods=["GET"])

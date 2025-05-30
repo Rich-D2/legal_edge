@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 import uuid
 import jwt
+import Dashboard from "./components/Dashboard";
 from datetime import datetime, timedelta
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash

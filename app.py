@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 import uuid
 import jwt
+import requests
 from datetime import datetime, timedelta
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,8 +15,23 @@ CORS(app)
 # In-memory user store for Render (non-persistent)
 users = []
 
-# Secret key for JWT
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "7ut3257t62pf9rjg1lpusugvi3")
+# AWS Cognito Configuration
+COGNITO_POOL_ID = "us-east-1_Jqsh67rOD"
+COGNITO_REGION = "us-east-1"
+COGNITO_KEYS_URL = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_POOL_ID}/.well-known/jwks.json"
+
+# Get JWKS
+jwks = requests.get(COGNITO_KEYS_URL).json()["keys"]
+
+def get_cognito_public_key(token):
+    headers = jwt.get_unverified_header(token)
+    kid = headers["kid"]
+    key = next((k for k in jwks if k["kid"] == kid), None)
+    if not key:
+        raise Exception("Public key not found in JWKS")
+
+    public_key = jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(key))
+    return public_key
 
 # JWT decorator
 def token_required(f):
@@ -28,11 +44,20 @@ def token_required(f):
                 token = parts[1]
         if not token:
             return jsonify({"error": "Token is missing"}), 401
+
         try:
-            data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
-            request.user_id = data["user_id"]
-        except:
-            return jsonify({"error": "Token is invalid"}), 401
+            public_key = get_cognito_public_key(token)
+            decoded = jwt.decode(
+                token,
+                public_key,
+                algorithms=["RS256"],
+                audience="7ut3257t62pf9rjg1lpusugvi3",  # Your App Client ID
+                issuer=f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_POOL_ID}"
+            )
+            request.user_id = decoded["sub"]
+        except Exception as e:
+            return jsonify({"error": f"Token is invalid: {str(e)}"}), 401
+
         return f(*args, **kwargs)
     return decorated
 

@@ -1,4 +1,3 @@
-// src/components/Dashboard.js
 import React, { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import axios from "axios";
@@ -10,8 +9,7 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchDashboard = async () => {
-      const token = auth.user?.access_token;
-      if (!token) {
+      if (!auth.user?.access_token) {
         setMessage("No access token found.");
         return;
       }
@@ -19,12 +17,12 @@ function Dashboard() {
       try {
         const res = await axios.get("https://legal-edge.onrender.com/api/dashboard", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${auth.user.access_token}`,
           },
         });
-        setMessage(res.data.message);
+        setMessage(res.data.message || "Welcome to the dashboard.");
       } catch (err) {
-        console.error("Error fetching dashboard:", err);
+        console.error("API error:", err);
         setMessage("Unauthorized or error fetching dashboard.");
         setError(err.response?.data || err.message);
       }
@@ -37,11 +35,7 @@ function Dashboard() {
     <div style={{ padding: "2rem" }}>
       <h1>Dashboard</h1>
       <p>{message}</p>
-      {error && (
-        <pre style={{ color: "red" }}>
-          {typeof error === "string" ? error : JSON.stringify(error, null, 2)}
-        </pre>
-      )}
+      {error && <pre style={{ color: "red" }}>{JSON.stringify(error, null, 2)}</pre>}
     </div>
   );
 }

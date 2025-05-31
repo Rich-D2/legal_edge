@@ -7,9 +7,9 @@ function App() {
   const auth = useAuth();
 
   const signOutRedirect = () => {
-    const clientId = "7ut3257t62pf9rjg1lpusugvi3"; // Replace with your actual client ID
-    const logoutUri = "https://legal-edge.onrender.com"; // Redirect URI
-    const cognitoDomain = "https://legal-edge.auth.us-east-1.amazoncognito.com"; // Replace this with your domain
+    const clientId = "7ut3257t62pf9rjg1lpusugvi3";
+    const logoutUri = "https://legal-edge.onrender.com";
+    const cognitoDomain = "https://legal-edge.auth.us-east-1.amazoncognito.com";
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
   };
 
@@ -29,7 +29,6 @@ function App() {
           <button onClick={() => auth.signinRedirect()}>Sign in</button>
         </div>
       )}
-
       {auth.isAuthenticated && (
         <div style={{ padding: "1rem" }}>
           <p>Signed in as: {auth.user?.profile.email}</p>

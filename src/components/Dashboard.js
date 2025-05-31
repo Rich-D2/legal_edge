@@ -10,20 +10,21 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchDashboard = async () => {
-      if (!auth.user?.access_token) {
+      const token = auth.user?.access_token;
+      if (!token) {
         setMessage("No access token found.");
         return;
       }
 
       try {
-        const res = await axios.get("/api/dashboard", {
+        const res = await axios.get("https://legal-edge.onrender.com/api/dashboard", {
           headers: {
-            Authorization: `Bearer ${auth.user.access_token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-        setMessage(res.data.message || "Welcome to the dashboard.");
+        setMessage(res.data.message);
       } catch (err) {
-        console.error("API error:", err);
+        console.error("Error fetching dashboard:", err);
         setMessage("Unauthorized or error fetching dashboard.");
         setError(err.response?.data || err.message);
       }
@@ -37,7 +38,9 @@ function Dashboard() {
       <h1>Dashboard</h1>
       <p>{message}</p>
       {error && (
-        <pre style={{ color: "red" }}>{JSON.stringify(error, null, 2)}</pre>
+        <pre style={{ color: "red" }}>
+          {typeof error === "string" ? error : JSON.stringify(error, null, 2)}
+        </pre>
       )}
     </div>
   );
